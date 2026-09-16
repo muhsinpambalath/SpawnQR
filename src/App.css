@@ -90,7 +90,7 @@ a {
 
 .brand h1 {
   margin: 0;
-  font-size: 39px;
+  font-size: 38 px;
   line-height: 1;
   font-weight: 800;
   letter-spacing: -2px;
@@ -166,8 +166,8 @@ a {
 ========================= */
 
 .generator {
-  width: min(1045px, calc(100% - 250px));
-  margin: 60px 0 0 auto;
+  width: min(1045px, calc(100% - 330px));
+  margin: 60px auto 0;
   border: 1px solid #23352a;
   border-radius: 17px;
   background:
@@ -967,43 +967,50 @@ a {
    FOOTER
 ========================= */
 
-footer {
-  width: min(1380px, 100%);
+.site-footer {
+  width: min(1210px, 100%);
   margin: 45px auto 0;
-  padding-top: 20px;
+  padding: 20px 0 10px;
   border-top: 1px solid #1c2821;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: #637068;
   font-size: 11px;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.footer-brand strong {
-  font-size: 20px;
-  color: #eaf0eb;
+  text-align: center;
 }
 
 .footer-links {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 24px;
+}
+
+.footer-links a {
+  transition: color 0.2s;
 }
 
 .footer-links a:hover {
   color: #39e875;
 }
 
+.site-footer p {
+  margin: 18px 0 0;
+  color: #4f5b54;
+  font-size: 10px;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
 
-@media (max-width: 1200px) {
+@media (max-width: 1670px) {
+
+  .generator{
+    width: min(1045px, calc(100% - 250px));
+    margin: 60px 0 0 auto;
+  }
+}
+
+@media (max-width: 1220px) {
   .hero-copy {
     display: none;
   }
@@ -1195,20 +1202,41 @@ footer {
     gap: 9px;
   }
 
-  footer {
-    margin-top: 32px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .info-page {
+    width: 100%;
+    margin-top: 30px;
+    padding: 28px 22px;
+    border-radius: 13px;
   }
 
-  .footer-brand {
-    gap: 6px;
+  .info-page h2 {
+    font-size: 26px;
+    margin-bottom: 22px;
+  }
+
+  .info-page p {
+    font-size: 13px;
+    line-height: 1.75;
+    margin-bottom: 17px;
+  }
+
+  .site-footer {
+    margin-top: 32px;
+    padding: 20px 0 10px;
   }
 
   .footer-links {
+    gap: 18px;
     flex-wrap: wrap;
-    gap: 14px;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+  }
+
+  .site-footer p {
+    margin-top: 20px;
+    font-size: 11px;
   }
 }
 
@@ -1257,4 +1285,42 @@ footer {
   .center-content-options {
     gap: 6px;
   }
+}
+
+/* =========================
+   INFO PAGES
+========================= */
+
+.info-page {
+  width: min(760px, 100%);
+  margin: 55px auto 0;
+  padding: 42px 46px;
+  border: 1px solid #202e26;
+  border-radius: 16px;
+  background: #0b120f;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.info-page h2 {
+  margin: 0 0 28px;
+  color: #f5f7f5;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+}
+
+.info-page p {
+  margin: 0 0 20px;
+  color: #9ba69f;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.info-page p:last-child {
+  margin-bottom: 0;
+}
+
+.info-page strong {
+  color: #e9eee9;
+  font-weight: 600;
 }
