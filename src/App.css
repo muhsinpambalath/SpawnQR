@@ -44,22 +44,42 @@ header p {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
-.tabs .disabled-tab {
-  color: #aaa;
-  cursor: not-allowed;
+.form-area {
+  width: min(500px, 90vw);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .main-input {
-  width: min(500px, 90vw);
+  width: 100%;
   padding: 15px 17px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 10px;
   outline: none;
+  background: white;
 }
 
 .main-input:focus {
   border-color: #555;
+}
+
+.text-input {
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 14px;
 }
 
 .qr-box {
