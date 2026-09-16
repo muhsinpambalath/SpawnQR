@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import QRCode from "qrcode";
+import QRCodeStyling from "qr-code-styling";
 import "./App.css";
 
 function escapeWifi(value) {
@@ -122,6 +122,45 @@ function ContactIcon() {
   );
 }
 
+const eyeStyles = [
+  {
+    name: "Square",
+    value: "square",
+    square: "square",
+    dot: "square",
+  },
+  {
+    name: "Rounded",
+    value: "rounded",
+    square: "extra-rounded",
+    dot: "dot",
+  },
+  {
+    name: "Dot",
+    value: "dot",
+    square: "dot",
+    dot: "dot",
+  },
+];
+
+function emojiToDataUrl(emoji) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 128;
+  canvas.height = 128;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0, 0, 128, 128);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font =
+    '96px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+
+  ctx.fillText(emoji, 64, 64);
+
+  return canvas.toDataURL("image/png");
+}
+
 function App() {
   const [type, setType] = useState("link");
 
@@ -145,8 +184,31 @@ function App() {
 
   const [foreground, setForeground] = useState("#111111");
   const [background, setBackground] = useState("#ffffff");
+  const [dotStyle, setDotStyle] = useState("square");
+  const [eyeStyle, setEyeStyle] = useState("square");
+  const [gradientEnabled, setGradientEnabled] = useState(false);
+  const [gradientStart, setGradientStart] = useState("#111111");
+  const [gradientEnd, setGradientEnd] = useState("#39e875");
+  const [gradientType, setGradientType] = useState("linear");
+  const [gradientRotation, setGradientRotation] = useState(0);
+  const [selectedTheme, setSelectedTheme] = useState("Classic");
+  const [centerContent, setCenterContent] = useState("none");
+  const [emoji, setEmoji] = useState("⭐");
+  const [logoImage, setLogoImage] = useState(null);
+  const [logoName, setLogoName] = useState("");
 
-  const canvasRef = useRef(null);
+  const qrContainerRef = useRef(null);
+  const qrCodeRef = useRef(null);
+  const currentEyeStyle =
+    eyeStyles.find((style) => style.value === eyeStyle) ||
+    eyeStyles[0];
+
+  const centerImage =
+    centerContent === "emoji"
+      ? emojiToDataUrl(emoji)
+      : centerContent === "logo"
+        ? logoImage
+        : undefined;
 
   const getQRValue = () => {
     if (type === "link") return link;
@@ -186,44 +248,191 @@ END:VCARD`;
   const qrValue = getQRValue();
 
   useEffect(() => {
-    if (!qrValue || !canvasRef.current) return;
+    if (!qrContainerRef.current) return;
 
-    const timeout = setTimeout(() => {
-      QRCode.toCanvas(
-        canvasRef.current,
-        qrValue,
-        {
-          width: 270,
-          margin: 2,
+    if (!qrCodeRef.current) {
+      qrCodeRef.current = new QRCodeStyling({
+        width: 270,
+        height: 270,
+        type: "canvas",
+        margin: 8,
+        qrOptions: {
           errorCorrectionLevel: "M",
-          color: {
-            dark: foreground,
-            light: background,
-          },
         },
-        (error) => {
-          if (error) console.error(error);
-        }
-      );
-    }, 150);
+        dotsOptions: gradientEnabled
+          ? {
+              type: dotStyle,
+              gradient: {
+                type: gradientType,
+                colorStops: [
+                  { offset: 0, color: gradientStart },
+                  { offset: 1, color: gradientEnd },
+                ],
+                rotation: (gradientRotation * Math.PI) / 180,
+              },
+            }
+          : {
+              type: dotStyle,
+              color: foreground,
+            },
+        cornersSquareOptions: gradientEnabled
+          ? {
+              type: currentEyeStyle.square,
+              gradient: {
+                type: gradientType,
+                colorStops: [
+                  { offset: 0, color: gradientStart },
+                  { offset: 1, color: gradientEnd },
+                ],
+                rotation: (gradientRotation * Math.PI) / 180,
+              },
+            }
+          : {
+              type: currentEyeStyle.square,
+              color: foreground,
+            },
+        cornersDotOptions: gradientEnabled
+          ? {
+              type: currentEyeStyle.dot,
+              gradient: {
+                type: gradientType,
+                colorStops: [
+                  { offset: 0, color: gradientStart },
+                  { offset: 1, color: gradientEnd },
+                ],
+                rotation: (gradientRotation * Math.PI) / 180,
+              },
+            }
+          : {
+              type: currentEyeStyle.dot,
+              color: foreground,
+            },
 
-    return () => clearTimeout(timeout);
-  }, [qrValue, foreground, background]);
+        image: centerImage,
+
+        imageOptions: {
+          hideBackgroundDots: true,
+          imageSize: 0.3,
+          margin: 6,
+        },
+
+        backgroundOptions: {
+          color: background,
+        },
+      });
+
+      qrCodeRef.current.append(qrContainerRef.current);
+    }
+
+    if (!qrValue) {
+      qrContainerRef.current.innerHTML = "";
+      return;
+    }
+
+    if (!qrContainerRef.current.hasChildNodes()) {
+      qrCodeRef.current.append(qrContainerRef.current);
+    }
+
+    qrCodeRef.current.update({
+      data: qrValue,
+      width: 270,
+      height: 270,
+      margin: 8,
+      qrOptions: {
+        errorCorrectionLevel: centerContent === "emoji" ? "H" : "M",
+      },
+
+      image: centerImage,
+      imageOptions: {
+        hideBackgroundDots: true,
+        imageSize: 0.3,
+        margin: 6,
+      },
+
+      dotsOptions: gradientEnabled
+        ? {
+            type: dotStyle,
+            gradient: {
+              type: gradientType,
+              colorStops: [
+                { offset: 0, color: gradientStart },
+                { offset: 1, color: gradientEnd },
+              ],
+              rotation: (gradientRotation * Math.PI) / 180,
+            },
+          }
+        : {
+            type: dotStyle,
+            color: foreground,
+            gradient: undefined,
+          },
+      cornersSquareOptions: gradientEnabled
+        ? {
+            type: currentEyeStyle.square,
+            gradient: {
+              type: gradientType,
+              colorStops: [
+                { offset: 0, color: gradientStart },
+                { offset: 1, color: gradientEnd },
+              ],
+              rotation: (gradientRotation * Math.PI) / 180,
+            },
+          }
+        : {
+            type: currentEyeStyle.square,
+            color: foreground,
+            gradient: undefined,
+          },
+      cornersDotOptions: gradientEnabled
+        ? {
+            type: currentEyeStyle.dot,
+            gradient: {
+              type: gradientType,
+              colorStops: [
+                { offset: 0, color: gradientStart },
+                { offset: 1, color: gradientEnd },
+              ],
+              rotation: (gradientRotation * Math.PI) / 180,
+            },
+          }
+        : {
+            type: currentEyeStyle.dot,
+            color: foreground,
+            gradient: undefined,
+          },
+      backgroundOptions: {
+        color: background,
+      },
+    });
+  }, [
+    qrValue,
+    foreground,
+    background,
+    dotStyle,
+    eyeStyle,
+    gradientEnabled,
+    gradientStart,
+    gradientEnd,
+    gradientType,
+    gradientRotation,
+    centerContent,
+    emoji,
+    centerImage,
+  ]);
 
   const applyTheme = (theme) => {
     setForeground(theme.foreground);
     setBackground(theme.background);
+    setSelectedTheme(theme.name);
   };
 
-  const downloadQR = () => {
-    if (!qrValue || !canvasRef.current) return;
+  const downloadQR = async (format) => {
+    if (!qrValue || !qrCodeRef.current) return;
 
-    const downloadLink = document.createElement("a");
-    downloadLink.download = "spawnqr.png";
-    downloadLink.href =
-      canvasRef.current.toDataURL("image/png");
-
-    downloadLink.click();
+    await qrCodeRef.current.download({
+      name: "spawnqr",
+      extension: format,
+    });
   };
 
   return (
@@ -254,10 +463,6 @@ END:VCARD`;
           <a href="#">Privacy</a>
           <a href="#">Contact</a>
 
-          <a className="github-button" href="#">
-            <span>◉</span>
-            View on GitHub
-          </a>
         </nav>
       </header>
 
@@ -526,6 +731,18 @@ END:VCARD`;
                   onClick={() => {
                     setForeground("#111111");
                     setBackground("#ffffff");
+                    setDotStyle("square");
+                    setEyeStyle("square");
+                    setSelectedTheme("Classic");
+                    setGradientEnabled(false);
+                    setGradientStart("#111111");
+                    setGradientEnd("#39e875");
+                    setGradientType("linear");
+                    setGradientRotation(0);
+                    setCenterContent("none");
+                    setEmoji("⭐");
+                    setLogoImage(null);
+                    setLogoName("");
                   }}
                 >
                   ↻ Reset
@@ -537,7 +754,9 @@ END:VCARD`;
                 {themes.map((theme) => (
                   <button
                     key={theme.name}
-                    className="theme"
+                    className={`theme ${
+                      selectedTheme === theme.name ? "active" : ""
+                    }`}
                     onClick={() => applyTheme(theme)}
                   >
                     <span
@@ -568,9 +787,10 @@ END:VCARD`;
                     <input
                       type="color"
                       value={foreground}
-                      onChange={(e) =>
-                        setForeground(e.target.value)
-                      }
+                      onChange={(e) => {
+                        setForeground(e.target.value);
+                        setSelectedTheme(null);
+                      }}
                     />
 
                     <code>{foreground}</code>
@@ -584,15 +804,233 @@ END:VCARD`;
                     <input
                       type="color"
                       value={background}
-                      onChange={(e) =>
-                        setBackground(e.target.value)
-                      }
+                      onChange={(e) => {
+                        setBackground(e.target.value);
+                        setSelectedTheme(null);
+                      }}
                     />
 
                     <code>{background}</code>
                   </div>
                 </label>
 
+              </div>
+
+              <div className="style-controls">
+                <div className="style-section">
+                  <span className="style-label">Dot Style</span>
+
+                  <div className="style-options">
+                    {[
+                      ["square", "Square"],
+                      ["rounded", "Rounded"],
+                      ["dots", "Dots"],
+                      ["classy", "Classy"],
+                      ["extra-rounded", "Extra"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        className={`style-option ${
+                          dotStyle === value ? "active" : ""
+                        }`}
+                        onClick={() => setDotStyle(value)}
+                      >
+                        <span className={`style-sample ${value}`} />
+                        <small>{label}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="style-section eye-style-section">
+                <span className="style-label">Eye Style</span>
+
+                <div className="style-options">
+                  {eyeStyles.map((style) => (
+                    <button
+                      key={style.value}
+                      className={`style-option ${
+                        eyeStyle === style.value ? "active" : ""
+                      }`}
+                      onClick={() => setEyeStyle(style.value)}
+                    >
+                      <span className={`eye-sample ${style.value}`}>
+                        <span />
+                      </span>
+
+                      <small>{style.name}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="advanced-customization">
+                <div className="advanced-section">
+                  <div className="gradient-header">
+                    <span className="style-label">Gradient</span>
+
+                    <button
+                      className={`gradient-toggle ${
+                        gradientEnabled ? "active" : ""
+                      }`}
+                      onClick={() => setGradientEnabled(!gradientEnabled)}
+                    >
+                      {gradientEnabled ? "On" : "Off"}
+                    </button>
+                  </div>
+
+                  {gradientEnabled && (
+                    <div className="gradient-controls">
+                      <div className="gradient-color">
+                        <label>Start</label>
+
+                        <label className="color-picker">
+                          <input
+                            type="color"
+                            value={gradientStart}
+                            onChange={(e) => setGradientStart(e.target.value)}
+                          />
+                          <span>{gradientStart}</span>
+                        </label>
+                      </div>
+
+                      <div className="gradient-color">
+                        <label>End</label>
+
+                        <label className="color-picker">
+                          <input
+                            type="color"
+                            value={gradientEnd}
+                            onChange={(e) => setGradientEnd(e.target.value)}
+                          />
+                          <span>{gradientEnd}</span>
+                        </label>
+                      </div>
+
+                      <div className="gradient-option">
+                        <label>Type</label>
+
+                        <select
+                          value={gradientType}
+                          onChange={(e) => setGradientType(e.target.value)}
+                        >
+                          <option value="linear">Linear</option>
+                          <option value="radial">Radial</option>
+                        </select>
+                      </div>
+
+                      <div className="gradient-option">
+                        <label>Direction</label>
+
+                        <select
+                          value={gradientRotation}
+                          onChange={(e) =>
+                            setGradientRotation(Number(e.target.value))
+                          }
+                        >
+                          <option value="0">0°</option>
+                          <option value="45">45°</option>
+                          <option value="90">90°</option>
+                          <option value="135">135°</option>
+                          <option value="180">180°</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="advanced-section center-content-section">
+                  <div className="gradient-header">
+                    <span className="style-label">Center Content</span>
+                  </div>
+
+                  <div className="center-content-options">
+                    <button
+                      className={`center-option ${
+                        centerContent === "none" ? "active" : ""
+                      }`}
+                      onClick={() => setCenterContent("none")}
+                    >
+                      None
+                    </button>
+
+                    <button
+                      className={`center-option ${
+                        centerContent === "emoji" ? "active" : ""
+                      }`}
+                      onClick={() => setCenterContent("emoji")}
+                    >
+                      Emoji
+                    </button>
+
+                    <button
+                      className={`center-option ${
+                        centerContent === "logo" ? "active" : ""
+                      }`}
+                      onClick={() => setCenterContent("logo")}
+                    >
+                      Image
+                    </button>
+                  </div>
+
+                  {centerContent === "emoji" && (
+                    <div className="emoji-control">
+                      <label>Emoji</label>
+
+                      <input
+                        type="text"
+                        value={emoji}
+                        onChange={(e) => setEmoji(e.target.value)}
+                        maxLength={2}
+                        placeholder="⭐"
+                      />
+                    </div>
+                  )}
+
+                  {centerContent === "logo" && (
+                    <div className="logo-upload">
+                      <label>Image</label>
+
+                      <label className="upload-box">
+                        <span className="upload-icon">+</span>
+                        <span>{logoName || "Upload an image"}</span>
+
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+
+                            if (!file) return;
+
+                            const reader = new FileReader();
+
+                            reader.onload = () => {
+                              setLogoImage(reader.result);
+                              setLogoName(file.name);
+                            };
+
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+
+                      {logoImage && (
+                        <button
+                          className="remove-logo"
+                          onClick={() => {
+                            setLogoImage(null);
+                            setLogoName("");
+                          }}
+                        >
+                          Remove image
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                </div>
               </div>
 
             </div>
@@ -609,13 +1047,16 @@ END:VCARD`;
                 backgroundColor: background,
               }}
             >
-              {qrValue ? (
-                <canvas ref={canvasRef} />
-              ) : (
+              <div
+                ref={qrContainerRef}
+                className={`qr-render ${!qrValue ? "hidden" : ""}`}
+              />
+
+              {!qrValue && (
                 <div className="empty-qr">
                   <img
                     className="empty-logo"
-                    src="/Logo.svg"
+                    src="/Logo-dark.svg"
                     alt=""
                   />
                   <span>Your QR appears here</span>
@@ -623,13 +1064,23 @@ END:VCARD`;
               )}
             </div>
 
-            <button
-              className="download-button"
-              onClick={downloadQR}
-              disabled={!qrValue}
-            >
-              ↓ &nbsp; Download PNG
-            </button>
+            <div className="download-buttons">
+              <button
+                className="download-button"
+                onClick={() => downloadQR("png")}
+                disabled={!qrValue}
+              >
+                ↓ &nbsp; Download PNG
+              </button>
+
+              <button
+                className="download-button download-svg"
+                onClick={() => downloadQR("svg")}
+                disabled={!qrValue}
+              >
+                ↓ &nbsp; Download SVG
+              </button>
+            </div>
 
             <div className="preview-meta">
               <span>High quality</span>
@@ -669,6 +1120,7 @@ END:VCARD`;
           <a href="#">FAQ</a>
           <a href="#">Privacy</a>
           <a href="#">Contact</a>
+          <a href="#">GitHub</a>
         </div>
 
       </footer>
