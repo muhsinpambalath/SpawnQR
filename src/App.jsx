@@ -123,6 +123,41 @@ function ContactIcon() {
   );
 }
 
+function DownloadIcon() {
+  return (
+    <svg
+      className="download-icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 4v10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+
+      <path
+        d="m8 11 4 4 4-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      <path
+        d="M5 20h14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const eyeStyles = [
   {
     name: "Square",
@@ -304,6 +339,24 @@ function Contact() {
         <p>
           Contact information will be added here before the public launch.
         </p>
+      </section>
+    </PageLayout>
+  );
+}
+
+function NotFound() {
+  return (
+    <PageLayout>
+      <section className="info-page not-found">
+        <h2>Page Not Found</h2>
+
+        <p>
+          The page you're looking for doesn't exist.
+        </p>
+
+        <Link to="/" className="not-found-link">
+          ← Back to SpawnQR
+        </Link>
       </section>
     </PageLayout>
   );
@@ -845,7 +898,7 @@ END:VCARD`;
                     <div className="custom-header">
                       <div>
                         <h2>Customize</h2>
-                        <p>Make it look yours.</p>
+                        <p>Appearance</p>
                       </div>
 
                       <button
@@ -1192,7 +1245,8 @@ END:VCARD`;
                       onClick={() => downloadQR("png")}
                       disabled={!qrValue}
                     >
-                      ↓ &nbsp; Download PNG
+                      <DownloadIcon />
+                      <span>Download PNG</span>
                     </button>
 
                     <button
@@ -1200,16 +1254,9 @@ END:VCARD`;
                       onClick={() => downloadQR("svg")}
                       disabled={!qrValue}
                     >
-                      ↓ &nbsp; Download SVG
+                      <DownloadIcon />
+                      <span>Download SVG</span>
                     </button>
-                  </div>
-
-                  <div className="preview-meta">
-                    <span>High quality</span>
-                    <i>•</i>
-                    <span>No watermark</span>
-                    <i>•</i>
-                    <span>Free forever</span>
                   </div>
 
                 </aside>
@@ -1222,7 +1269,6 @@ END:VCARD`;
 
           <div className="ad-placeholder">
             <span>ADVERTISEMENT</span>
-            <small>SUPPORT SPAWNQR · KEEP IT FREE</small>
           </div>
 
         </PageLayout>
@@ -1232,6 +1278,7 @@ END:VCARD`;
       <Route path="/faq" element={<FAQ />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

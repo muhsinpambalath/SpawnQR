@@ -90,7 +90,7 @@ a {
 
 .brand h1 {
   margin: 0;
-  font-size: 38 px;
+  font-size: 38px;
   line-height: 1;
   font-weight: 800;
   letter-spacing: -2px;
@@ -169,7 +169,7 @@ a {
   width: min(1045px, calc(100% - 330px));
   margin: 60px auto 0;
   border: 1px solid #23352a;
-  border-radius: 17px;
+  border-radius: 10px;
   background:
     linear-gradient(
       135deg,
@@ -177,8 +177,8 @@ a {
       rgba(8, 14, 11, 0.96)
     );
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.35),
-    inset 0 1px rgba(255, 255, 255, 0.025);
+    0 18px 45px rgba(0, 0, 0, 0.28),
+    inset 0 1px rgba(255, 255, 255, 0.02);
   overflow: hidden;
 }
 
@@ -202,7 +202,7 @@ a {
   grid-template-columns: repeat(4, 1fr);
   padding: 0;
   border: 1px solid #26362e;
-  border-radius: 12px;
+  border-radius: 7px;
   overflow: hidden;
   background: rgba(9, 16, 13, 0.8);
 }
@@ -268,7 +268,7 @@ a {
   min-height: 56px;
   padding: 15px 17px;
   border: 1px solid #2b3a32;
-  border-radius: 11px;
+  border-radius: 7px;
   outline: none;
   color: #eef4ef;
   background: #0d1511;
@@ -356,7 +356,7 @@ a {
   width: 73px;
   padding: 7px;
   border: 1px solid #26362e;
-  border-radius: 11px;
+  border-radius: 6px;
   background: #0b120e;
   color: #c8d0cb;
   transition: 0.2s;
@@ -375,7 +375,7 @@ a {
 
 .theme-preview {
   height: 42px;
-  border-radius: 7px;
+  border-radius: 4px;
   display: grid;
   place-items: center;
   margin-bottom: 5px;
@@ -384,7 +384,7 @@ a {
 .theme-preview span {
   width: 22px;
   height: 22px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .theme small {
@@ -411,7 +411,7 @@ a {
   margin-top: 6px;
   height: 44px;
   border: 1px solid #293930;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #0b120e;
   display: flex;
   align-items: center;
@@ -458,7 +458,7 @@ a {
   width: 76px;
   padding: 9px 6px;
   border: 1px solid #26362e;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #0b120e;
   color: #9ba69f;
   display: flex;
@@ -566,7 +566,7 @@ a {
 .gradient-toggle {
   padding: 5px 12px;
   border: 1px solid #26362e;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #0b120e;
   color: #9ba69f;
   font-size: 11px;
@@ -605,7 +605,7 @@ a {
   align-items: center;
   gap: 8px;
   border: 1px solid #26362e;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #0b120e;
   color: #c8d0cb;
   font-size: 11px;
@@ -629,7 +629,7 @@ a {
   height: 38px;
   padding: 0 10px;
   border: 1px solid #26362e;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #0b120e;
   color: #c8d0cb;
   font-size: 11px;
@@ -667,7 +667,7 @@ a {
   flex: 1;
   height: 38px;
   border: 1px solid #26362e;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #0b120e;
   color: #9ba69f;
   font-size: 11px;
@@ -861,14 +861,34 @@ a {
   width: 270px;
   margin-top: 20px;
   padding: 11px 16px;
-  border: 0;
-  border-radius: 10px;
-  background: #39e875;
-  color: #07100a;
-  font-size: 14px;
-  font-weight: 800;
   box-shadow: 0 7px 25px rgba(57, 232, 117, 0.16);
-  transition: 0.2s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  color: #07100a;
+  background: #39e875;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.download-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
 .download-buttons {
@@ -1323,4 +1343,21 @@ a {
 .info-page strong {
   color: #e9eee9;
   font-weight: 600;
+}
+
+.not-found {
+  text-align: center;
+}
+
+.not-found-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #39e875;
+  font-size: 14px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.not-found-link:hover {
+  opacity: 0.75;
 }
