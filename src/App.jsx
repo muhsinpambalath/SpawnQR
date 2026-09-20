@@ -234,7 +234,7 @@ function SiteFooter() {
         <Link to="/faq">FAQ</Link>
         <Link to="/privacy">Privacy</Link>
         <Link to="/contact">Contact</Link>
-        <a href="https://github.com/" target="_blank" rel="noreferrer">
+        <a href="https://github.com/muhsinpambalath/SpawnQR" target="_blank" rel="noreferrer">
           GitHub
         </a>
       </div>
