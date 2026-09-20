@@ -337,8 +337,18 @@ function Contact() {
         </p>
 
         <p>
-          Contact information will be added here before the public launch.
+          For bugs, feature requests, or general feedback, open an issue on
+          the SpawnQR GitHub repository.
         </p>
+
+        <a
+          className="contact-link"
+          href="https://github.com/muhsinpambalath/SpawnQR/issues"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Open GitHub Issues →
+        </a>
       </section>
     </PageLayout>
   );

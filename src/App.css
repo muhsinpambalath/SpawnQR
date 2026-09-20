@@ -1361,3 +1361,16 @@ a {
 .not-found-link:hover {
   opacity: 0.75;
 }
+
+.contact-link {
+  display: inline-block;
+  margin-top: 4px;
+  color: #39e875;
+  font-size: 14px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.contact-link:hover {
+  opacity: 0.75;
+}
