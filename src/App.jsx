@@ -208,6 +208,18 @@ function SEO({ title, description }) {
     if (metaDescription) {
       metaDescription.setAttribute("content", description);
     }
+
+    const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+
+    canonical.setAttribute("href", canonicalUrl);
   }, [title, description]);
 
   return null;
