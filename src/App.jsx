@@ -531,6 +531,7 @@ function App() {
   const [emoji, setEmoji] = useState("⭐");
   const [logoImage, setLogoImage] = useState(null);
   const [logoName, setLogoName] = useState("");
+  const [colorError, setColorError] = useState("");
 
   const qrContainerRef = useRef(null);
   const qrCodeRef = useRef(null);
@@ -1103,8 +1104,16 @@ END:VCARD`;
                             type="color"
                             value={foreground}
                             onChange={(e) => {
-                              setForeground(e.target.value);
+                              const newColor = e.target.value;
+
+                              if (newColor.toLowerCase() === background.toLowerCase()) {
+                                setColorError("QR and background colors must be different.");
+                                return;
+                              }
+
+                              setForeground(newColor);
                               setSelectedTheme(null);
+                              setColorError("");
                             }}
                           />
 
@@ -1120,8 +1129,16 @@ END:VCARD`;
                             type="color"
                             value={background}
                             onChange={(e) => {
-                              setBackground(e.target.value);
+                              const newColor = e.target.value;
+
+                              if (newColor.toLowerCase() === foreground.toLowerCase()) {
+                                setColorError("QR and background colors must be different.");
+                                return;
+                              }
+
+                              setBackground(newColor);
                               setSelectedTheme(null);
+                              setColorError("");
                             }}
                           />
 
@@ -1130,6 +1147,12 @@ END:VCARD`;
                       </label>
 
                     </div>
+
+                    {colorError && (
+                      <p className="color-error">
+                        {colorError}
+                      </p>
+                    )}
 
                     <div className="style-controls">
                       <div className="style-section">
