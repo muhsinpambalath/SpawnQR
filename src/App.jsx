@@ -197,6 +197,22 @@ function emojiToDataUrl(emoji) {
   return canvas.toDataURL("image/png");
 }
 
+function SEO({ title, description }) {
+  useEffect(() => {
+    document.title = title;
+
+    const metaDescription = document.querySelector(
+      'meta[name="description"]'
+    );
+
+    if (metaDescription) {
+      metaDescription.setAttribute("content", description);
+    }
+  }, [title, description]);
+
+  return null;
+}
+
 function SiteHeader() {
   return (
     <header className="site-header">
@@ -259,6 +275,12 @@ function PageLayout({ children }) {
 function About() {
   return (
     <PageLayout>
+
+      <SEO
+        title="About SpawnQR - Free QR Code Generator"
+        description="Learn about SpawnQR, a simple client-side QR code generator for creating and customizing QR codes without an account."
+      />
+
       <section className="info-page">
         <h2>About SpawnQR</h2>
 
@@ -285,22 +307,75 @@ function About() {
 function FAQ() {
   return (
     <PageLayout>
+
+      <SEO
+        title="QR Code Generator FAQ - SpawnQR"
+        description="Find answers about SpawnQR, QR code expiration, Wi-Fi QR codes, contact QR codes, customization, downloads, and privacy."
+      />
+
       <section className="info-page">
-        <h2>Frequently Asked Questions</h2>
+        <h2>QR Code Generator FAQ</h2>
 
         <p>
           <strong>Is SpawnQR free?</strong><br />
-          Yes. SpawnQR is free to use.
+          Yes. SpawnQR is free to use and does not require an account.
         </p>
 
         <p>
-          <strong>Do I need an account?</strong><br />
-          No. You can create and download QR codes without signing up.
+          <strong>Do I need an account to create a QR code?</strong><br />
+          No. You can create, customize, and download QR codes without signing
+          up or creating an account.
         </p>
 
         <p>
-          <strong>What QR codes can I create?</strong><br />
-          You can currently create Link, Text, Wi-Fi, and Contact QR codes.
+          <strong>What types of QR codes can I create?</strong><br />
+          SpawnQR currently supports Link, Text, Wi-Fi, and Contact QR codes.
+        </p>
+
+        <p>
+          <strong>Do SpawnQR QR codes expire?</strong><br />
+          SpawnQR creates static QR codes. The information is stored directly
+          inside the QR code, so the generated QR code does not depend on a
+          SpawnQR account or server to keep working.
+        </p>
+
+        <p>
+          <strong>Can I customize my QR code?</strong><br />
+          Yes. You can change the QR color, background color, dot style, eye
+          style, and add gradients. You can also add an emoji or image to the
+          center of the QR code.
+        </p>
+
+        <p>
+          <strong>Can I download my QR code?</strong><br />
+          Yes. SpawnQR lets you download generated QR codes as PNG or SVG
+          files.
+        </p>
+
+        <p>
+          <strong>Can I create a Wi-Fi QR code?</strong><br />
+          Yes. Enter your Wi-Fi network name, security type, and password to
+          create a QR code that compatible devices can scan to connect.
+        </p>
+
+        <p>
+          <strong>Can I create a contact QR code?</strong><br />
+          Yes. You can create a QR code containing contact information such as
+          a name, phone number, email address, organization, and website.
+        </p>
+
+        <p>
+          <strong>Does SpawnQR store the information I enter?</strong><br />
+          QR generation happens directly in your browser. Your QR content does
+          not need to be uploaded to a SpawnQR server to generate the QR code.
+        </p>
+
+        <p>
+          <strong>Can I use a QR code commercially?</strong><br />
+          SpawnQR generates QR codes without adding a watermark or requiring a
+          subscription. How you use a generated QR code is your responsibility,
+          including any requirements related to the content or service you link
+          to.
         </p>
       </section>
     </PageLayout>
@@ -310,16 +385,40 @@ function FAQ() {
 function Privacy() {
   return (
     <PageLayout>
+      <SEO
+        title="Privacy - SpawnQR"
+        description="Learn how SpawnQR processes QR code data directly in your browser and how your information is handled."
+      />
+
       <section className="info-page">
         <h2>Privacy</h2>
 
         <p>
           SpawnQR is designed to generate QR codes directly in your browser.
+          No account is required to use the QR generator.
         </p>
 
         <p>
-          Your QR code content is processed locally by the application and is
-          not required to be uploaded to a server to generate the QR code.
+          The information you enter into the QR generator is processed locally
+          by the application to create the QR code. QR generation does not
+          require your QR content to be uploaded to a SpawnQR server.
+        </p>
+
+        <p>
+          When you upload an image for center content, the image is processed
+          locally in your browser and used to generate the QR code. It is not
+          required to be uploaded to a SpawnQR server.
+        </p>
+
+        <p>
+          SpawnQR does not currently require you to create an account or submit
+          your QR content to use the generator.
+        </p>
+
+        <p>
+          If third-party services are added to SpawnQR in the future, this
+          privacy page will be updated to describe their relevant data
+          practices.
         </p>
       </section>
     </PageLayout>
@@ -329,6 +428,12 @@ function Privacy() {
 function Contact() {
   return (
     <PageLayout>
+
+      <SEO
+        title="Contact SpawnQR"
+        description="Contact SpawnQR for bugs, feature requests, suggestions, and general feedback."
+      />
+
       <section className="info-page">
         <h2>Contact</h2>
 
@@ -357,6 +462,12 @@ function Contact() {
 function NotFound() {
   return (
     <PageLayout>
+
+      <SEO
+        title="Page Not Found - SpawnQR"
+        description="The page you're looking for could not be found."
+      />
+
       <section className="info-page not-found">
         <h2>Page Not Found</h2>
 
@@ -650,6 +761,11 @@ END:VCARD`;
     <Routes>
       <Route path="/" element={
         <PageLayout>
+
+          <SEO
+            title="SpawnQR - Free QR Code Generator"
+            description="Create free QR codes for links, text, Wi-Fi, and contacts. Customize your QR code and download it as PNG or SVG with no signup."
+          />
 
           {/* HERO */}
 
