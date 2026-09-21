@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import QRCodeStyling from "qr-code-styling";
 import "./App.css";
 
@@ -496,6 +496,7 @@ function NotFound() {
 }
 
 function App() {
+  const location = useLocation();
   const [type, setType] = useState("link");
 
   const [link, setLink] = useState("");
@@ -752,6 +753,7 @@ END:VCARD`;
     centerContent,
     emoji,
     centerImage,
+    location.pathname,
   ]);
 
   const applyTheme = (theme) => {
